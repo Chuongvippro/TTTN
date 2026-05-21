@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Về chúng tôi — Pawmie Pet Shop</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+  <style>
+    body { background: #f9fafb; font-family: 'Nunito', sans-serif; }
+
+    /* ── Hero ── */
+    .about-hero {
+      background: linear-gradient(135deg, #fff8f5 0%, #ffeee6 60%, #fff3f0 100%);
+      padding: 80px 0 60px;
+      text-align: center;
+      border-bottom: 1.5px solid #fde8e0;
+    }
+    .about-hero-emoji { font-size: 4rem; margin-bottom: 16px; display: block; }
+    .about-hero-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2.8rem; font-weight: 800; color: #222;
+      margin-bottom: 16px; line-height: 1.2;
+    }
+    .about-hero-title span { color: #E85D28; }
+    .about-hero-desc {
+      font-size: 1.1rem; color: #666; font-weight: 600;
+      max-width: 600px; margin: 0 auto; line-height: 1.7;
+    }
+
+    /* ── Section chung ── */
+    .section-pad { padding: 72px 0; }
+    .section-label {
+      display: inline-block; background: #fff3ee; color: #E85D28;
+      border-radius: 99px; padding: 5px 16px;
+      font-size: 0.82rem; font-weight: 800;
+      margin-bottom: 12px; letter-spacing: 0.5px;
+    }
+    .section-h {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2rem; font-weight: 800; color: #222;
+      margin-bottom: 12px; line-height: 1.3;
+    }
+    .section-h span { color: #E85D28; }
+    .section-sub { color: #666; font-size: 0.95rem; font-weight: 600; line-height: 1.7; }
+
+    /* ── Story ── */
+    .story-section { background: #fff; }
+    .story-img {
+      border-radius: 24px; object-fit: cover;
+      width: 100%; height: 380px;
+      box-shadow: 0 16px 48px rgba(232,93,40,0.12);
+    }
+    .story-text { color: #555; line-height: 1.85; font-size: 0.97rem; }
+    .story-text p { margin-bottom: 16px; }
+    .story-text strong { color: #E85D28; }
+
+    /* ── Stats ── */
+    .stats-section { background: linear-gradient(135deg, #E85D28, #ff7a45); color: #fff; }
+    .stat-item { text-align: center; padding: 20px; }
+    .stat-num {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2.8rem; font-weight: 800; color: #fff;
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.9rem; font-weight: 700; opacity: 0.85; margin-top: 6px; }
+
+    /* ── Values ── */
+    .values-section { background: #f9fafb; }
+    .value-card {
+      background: #fff; border-radius: 20px;
+      padding: 32px 24px; text-align: center;
+      border: 1.5px solid #f0f0f0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+      transition: transform 0.25s, box-shadow 0.25s;
+      height: 100%;
+    }
+    .value-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(232,93,40,0.1);
+    }
+    .value-icon {
+      font-size: 2.8rem; margin-bottom: 16px; display: block;
+      filter: drop-shadow(0 4px 8px rgba(232,93,40,0.2));
+    }
+    .value-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.15rem; font-weight: 700; color: #222;
+      margin-bottom: 10px;
+    }
+    .value-desc { font-size: 0.88rem; color: #666; line-height: 1.7; }
+
+    /* ── Founders ── */
+    .founders-section { background: #fff; }
+    .founder-card {
+      background: #f9fafb; border-radius: 24px;
+      overflow: hidden; text-align: center;
+      border: 1.5px solid #f0f0f0;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+      transition: transform 0.25s, box-shadow 0.25s;
+      height: 100%;
+    }
+    .founder-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(232,93,40,0.12);
+    }
+    .founder-avatar-wrap {
+      background: linear-gradient(135deg, #E85D28, #ff8c5a);
+      padding: 36px 0 28px;
+      position: relative;
+    }
+    .founder-avatar {
+      width: 110px; height: 110px; border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      border: 4px solid rgba(255,255,255,0.6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; margin: 0 auto;
+      font-family: 'Baloo 2', cursive; font-weight: 800; color: #fff;
+    }
+    .founder-body { padding: 24px 20px 28px; }
+    .founder-name {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.3rem; font-weight: 800; color: #222;
+      margin-bottom: 4px;
+    }
+    .founder-role {
+      display: inline-block; background: #fff3ee; color: #E85D28;
+      border-radius: 99px; padding: 3px 14px;
+      font-size: 0.8rem; font-weight: 800; margin-bottom: 14px;
+    }
+    .founder-bio {
+      font-size: 0.88rem; color: #666; line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .founder-quote {
+      background: #fff8f5; border-left: 3px solid #E85D28;
+      border-radius: 0 10px 10px 0;
+      padding: 10px 14px; font-size: 0.85rem;
+      color: #E85D28; font-style: italic; font-weight: 700;
+    }
+
+    /* ── Pet story ── */
+    .pet-section { background: linear-gradient(135deg, #fff8f5, #ffeee6); }
+    .pet-card {
+      background: #fff; border-radius: 20px;
+      padding: 24px; border: 1.5px solid #fde8e0;
+      display: flex; gap: 16px; align-items: flex-start;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(232,93,40,0.06);
+    }
+    .pet-emoji { font-size: 2.5rem; flex-shrink: 0; }
+    .pet-title {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 700; font-size: 1rem; color: #222; margin-bottom: 6px;
+    }
+    .pet-text { font-size: 0.88rem; color: #666; line-height: 1.7; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: linear-gradient(135deg, #222, #333);
+      color: #fff; text-align: center; padding: 72px 0;
+    }
+    .cta-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2.2rem; font-weight: 800; margin-bottom: 12px;
+    }
+    .cta-title span { color: #ff8c5a; }
+    .cta-desc { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 32px; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <!-- ══ HERO ══ -->
+  <div class="about-hero">
+    <div class="container">
+      <span class="about-hero-emoji">🐾</span>
+      <h1 class="about-hero-title">
+        Chúng tôi yêu <span>thú cưng</span><br>như yêu chính mình
+      </h1>
+      <p class="about-hero-desc">
+        Pawmie ra đời từ tình yêu với những người bạn nhỏ bốn chân —
+        và khát vọng mang đến những điều tốt nhất cho chúng.
+      </p>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ══ CÂU CHUYỆN ══ -->
+    <section class="section-pad story-section">
+      <div class="container">
+        <div class="row g-5 align-items-center">
+          <div class="col-lg-5">
+            <img
+              src="uploads/about-pawmie.jpg"
+              alt="Câu chuyện Pawmie"
+              class="story-img"
+            >
+          </div>
+          <div class="col-lg-7">
+            <span class="section-label">📖 Câu chuyện của chúng tôi</span>
+            <h2 class="section-h">Từ tình yêu thú cưng<br>đến <span>Pawmie</span></h2>
+            <div class="story-text">
+              <p>
+                Tất cả bắt đầu từ một buổi chiều năm 2024, khi ba người bạn —
+                <strong>Chương Nguyên</strong>, <strong>Thanh Trí</strong> và <strong>Hiếu Toàn</strong> —
+                ngồi cùng nhau và nhận ra một điều: những chú chó, chú mèo đã cho chúng tôi
+                biết bao nhiêu tình yêu thương, nhưng thị trường phụ kiện thú cưng ở Việt Nam
+                vẫn còn quá thiếu thốn về chất lượng và sự đa dạng.
+              </p>
+              <p>
+                Chúng tôi quyết định thay đổi điều đó. <strong>Pawmie</strong> được xây dựng với
+                một sứ mệnh đơn giản: <em>mang đến những sản phẩm chất lượng cao, giá hợp lý,
+                và dịch vụ tận tâm cho mọi người nuôi thú cưng tại Việt Nam.</em>
+              </p>
+              <p>
+                Từ những ngày đầu chỉ có vài chục sản phẩm, Pawmie ngày nay đã phục vụ
+                hàng ngàn khách hàng trên khắp cả nước — và chúng tôi vẫn không ngừng
+                lớn mạnh mỗi ngày, vì những người bạn nhỏ bốn chân xứng đáng được hưởng
+                những điều tốt đẹp nhất.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ STATS ══ -->
+    <section class="stats-section section-pad">
+      <div class="container">
+        <div class="row g-4 text-center">
+          <div class="col-6 col-md-3">
+            <div class="stat-item">
+              <div class="stat-num">5,000+</div>
+              <div class="stat-label">Khách hàng hài lòng</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-item">
+              <div class="stat-num">500+</div>
+              <div class="stat-label">Sản phẩm chất lượng</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-item">
+              <div class="stat-num">63</div>
+              <div class="stat-label">Tỉnh thành giao hàng</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-item">
+              <div class="stat-num">4.9⭐</div>
+              <div class="stat-label">Đánh giá trung bình</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ GIÁ TRỊ ══ -->
+    <section class="section-pad values-section">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-label">💎 Giá trị cốt lõi</span>
+          <h2 class="section-h">Những gì chúng tôi<br><span>cam kết với bạn</span></h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-3">
+            <div class="value-card">
+              <span class="value-icon">🏆</span>
+              <div class="value-title">Chất lượng hàng đầu</div>
+              <p class="value-desc">Mọi sản phẩm đều được kiểm định nghiêm ngặt, đảm bảo an toàn tuyệt đối cho thú cưng của bạn.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="value-card">
+              <span class="value-icon">💰</span>
+              <div class="value-title">Giá cả minh bạch</div>
+              <p class="value-desc">Không phí ẩn, không thổi giá. Chúng tôi cam kết mức giá tốt nhất, cạnh tranh nhất trên thị trường.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="value-card">
+              <span class="value-icon">🚀</span>
+              <div class="value-title">Giao hàng nhanh</div>
+              <p class="value-desc">Giao hàng toàn quốc trong 2-5 ngày. Nội thành TP.HCM và Hà Nội giao trong ngày với đơn trước 12h.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="value-card">
+              <span class="value-icon">💝</span>
+              <div class="value-title">Tận tâm từ trái tim</div>
+              <p class="value-desc">Đội ngũ hỗ trợ 7 ngày/tuần, luôn sẵn sàng tư vấn và giải đáp mọi thắc mắc của bạn.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FOUNDERS ══ -->
+    <section class="section-pad founders-section">
+      <div class="container">
+        <div class="text-center mb-5">
+          <span class="section-label">👥 Đội ngũ sáng lập</span>
+          <h2 class="section-h">Những người <span>đứng sau Pawmie</span></h2>
+          <p class="section-sub">Ba người bạn, một tình yêu chung với thú cưng</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+
+          <!-- Chương Nguyên -->
+          <div class="col-md-6 col-lg-4">
+            <div class="founder-card">
+              <div class="founder-avatar-wrap">
+                <div class="founder-avatar">CN</div>
+              </div>
+              <div class="founder-body">
+                <div class="founder-name">Chương Nguyên</div>
+                <span class="founder-role">Co-Founder & CEO</span>
+                <p class="founder-bio">
+                  Người đặt nền móng cho Pawmie với tầm nhìn xây dựng thương hiệu phụ kiện
+                  thú cưng hàng đầu Việt Nam. Nuôi 2 chú chó Golden và 1 bé mèo Anh lông ngắn.
+                </p>
+                <div class="founder-quote">
+                  "Thú cưng cho chúng ta tình yêu vô điều kiện — chúng xứng đáng được đáp lại bằng những điều tốt nhất."
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thanh Trí -->
+          <div class="col-md-6 col-lg-4">
+            <div class="founder-card">
+              <div class="founder-avatar-wrap" style="background: linear-gradient(135deg, #2B8ED8, #5bb3f0);">
+                <div class="founder-avatar">TT</div>
+              </div>
+              <div class="founder-body">
+                <div class="founder-name">Thanh Trí</div>
+                <span class="founder-role" style="background:#e0f2fe;color:#0369a1;">Co-Founder & CTO</span>
+                <p class="founder-bio">
+                  Kiến trúc sư công nghệ của Pawmie, người xây dựng nền tảng kỹ thuật
+                  từ số 0. Đam mê lập trình và nuôi một chú mèo Ragdoll tên là "Bug".
+                </p>
+                <div class="founder-quote" style="border-color:#0369a1;color:#0369a1;background:#f0f9ff;">
+                  "Công nghệ tốt không phải là thứ phức tạp nhất — mà là thứ giúp cuộc sống trở nên đơn giản hơn."
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hiếu Toàn -->
+          <div class="col-md-6 col-lg-4">
+            <div class="founder-card">
+              <div class="founder-avatar-wrap" style="background: linear-gradient(135deg, #059669, #34d399);">
+                <div class="founder-avatar">HT</div>
+              </div>
+              <div class="founder-body">
+                <div class="founder-name">Hiếu Toàn</div>
+                <span class="founder-role" style="background:#d1fae5;color:#065f46;">Co-Founder & CFO</span>
+                <p class="founder-bio">
+                  Người giữ cân bằng tài chính và chiến lược phát triển bền vững cho Pawmie.
+                  Yêu thích hiking cùng chú chó Husky tên "Bắc Cực".
+                </p>
+                <div class="founder-quote" style="border-color:#059669;color:#059669;background:#f0fdf4;">
+                  "Kinh doanh tốt nhất là khi cả khách hàng lẫn thú cưng của họ đều hạnh phúc."
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CÂU CHUYỆN THÚ CƯNG ══ -->
+    <section class="section-pad pet-section">
+      <div class="container">
+        <div class="row g-5 align-items-center">
+          <div class="col-lg-5">
+            <span class="section-label">🐾 Câu chuyện với thú cưng</span>
+            <h2 class="section-h">Họ không chỉ là thú cưng —<br><span>họ là gia đình</span></h2>
+            <p class="section-sub mb-4">
+              Mỗi thành viên trong đội ngũ Pawmie đều có câu chuyện riêng với người bạn nhỏ của mình.
+              Chính những câu chuyện đó là nguồn cảm hứng để chúng tôi làm việc mỗi ngày.
+            </p>
+            <a href="/products" class="btn-primary-custom" style="display:inline-flex;">
+              <i class="fas fa-shopping-bag me-2"></i> Mua sắm cho bé yêu
+            </a>
+          </div>
+          <div class="col-lg-7">
+            <div class="pet-card">
+              <span class="pet-emoji">🐕</span>
+              <div>
+                <div class="pet-title">Khi "Max" thay đổi tất cả</div>
+                <p class="pet-text">
+                  Chương Nguyên kể: "Ngày đón Max về, tôi không biết gì về việc nuôi chó. Mất hàng giờ tìm kiếm
+                  phụ kiện chất lượng với giá hợp lý. Đó là lúc tôi nghĩ — tại sao không tạo ra một nơi
+                  mà pet parent có thể tin tưởng hoàn toàn?"
+                </p>
+              </div>
+            </div>
+            <div class="pet-card">
+              <span class="pet-emoji">🐈</span>
+              <div>
+                <div class="pet-title">"Bug" — chú mèo lập trình viên</div>
+                <p class="pet-text">
+                  Thanh Trí cười nhớ lại: "Bug hay ngồi lên bàn phím khi tôi đang code. Nhiều lần
+                  bị 'review code' bởi một chú mèo. Nhưng chính những khoảnh khắc đó làm tôi nhận ra
+                  thú cưng mang lại sự cân bằng mà không gì thay thế được."
+                </p>
+              </div>
+            </div>
+            <div class="pet-card">
+              <span class="pet-emoji">🐺</span>
+              <div>
+                <div class="pet-title">Cuộc phiêu lưu với "Bắc Cực"</div>
+                <p class="pet-text">
+                  Hiếu Toàn chia sẻ: "Husky cần rất nhiều vận động. Tôi bắt đầu leo núi vì 'Bắc Cực'.
+                  Giờ đây chúng tôi đã chinh phục hơn 20 đỉnh núi cùng nhau. Thú cưng không chỉ
+                  là người bạn — chúng là người thầy dạy ta sống trọn vẹn hơn."
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CTA ══ -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Cùng chúng tôi <span>yêu thương</span> thú cưng 🐾</h2>
+        <p class="cta-desc">Khám phá hàng trăm sản phẩm chất lượng cao được tuyển chọn kỹ lưỡng</p>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+          <a href="/products" class="btn-primary-custom" style="display:inline-flex;">
+            <i class="fas fa-shopping-bag me-2"></i> Mua sắm ngay
+          </a>
+          <a href="/blog" class="btn-outline-custom" style="display:inline-flex;border-color:rgba(255,255,255,0.3);color:#fff;">
+            <i class="fas fa-book-open me-2"></i> Đọc Blog
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+</body>
+</html>

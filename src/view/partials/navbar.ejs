@@ -1,0 +1,84 @@
+<nav class="navbar" id="mainNavbar">
+  <div class="container-fluid px-4">
+
+    <a href="/" class="navbar-brand">
+      <span class="brand-paw">🐾</span> Pawmie
+    </a>
+
+    <ul class="nav-links d-none d-lg-flex">
+      <li><a href="/" class="<%= typeof activePage !== 'undefined' && activePage==='home' ? 'active':'' %>">Trang chủ</a></li>
+      <li><a href="/products" class="<%= typeof activePage !== 'undefined' && activePage==='products' ? 'active':'' %>">Sản phẩm</a></li>
+      <li><a href="/blog" class="<%= typeof activePage !== 'undefined' && activePage==='blog' ? 'active':'' %>">Blog</a></li>
+      <li><a href="/about" class="<%= typeof activePage !== 'undefined' && activePage==='about' ? 'active':'' %>">Về chúng tôi</a></li>
+      <% if (typeof user !== 'undefined' && user && (user.role === 'admin' || user.role === 'staff')) { %>
+      <li><a href="/admin" style="color:#E85D28;font-weight:800;"><i class="fas fa-shield-alt me-1"></i>Quản trị</a></li>
+      <% } %>
+    </ul>
+
+    <div class="nav-actions">
+
+      <div class="nav-search-wrap d-none d-lg-flex" style="position:relative;">
+        <!-- Đổi ID thành searchInput để khớp với file JS -->
+        <input type="text" class="nav-search-input" id="searchInput" 
+              placeholder="Tìm sản phẩm..." autocomplete="off">
+        
+        <button class="nav-search-btn" onclick="handleSearch()">
+          <i class="fas fa-search"></i>
+        </button>
+
+        <!-- THÊM CÁI NÀY: Khung hiển thị kết quả gợi ý (Debounce) -->
+        <div id="searchResult" style="
+          display: none; 
+          position: absolute; 
+          top: 100%; 
+          left: 0; 
+          right: 0; 
+          background: white; 
+          border: 1px solid #ddd; 
+          border-radius: 8px; 
+          z-index: 999; 
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          margin-top: 5px;
+        "></div>
+      </div>
+
+      <% if (typeof user !== 'undefined' && user) { %>
+        <a href="/order/my-orders" class="nav-icon-btn" title="Đơn hàng của tôi"><i class="fas fa-box-open"></i></a>
+        <a href="/user/cart" class="nav-icon-btn" title="Giỏ hàng">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-badge cart-count" style="display:none;">0</span>
+        </a>
+        <a href="/user/profile" class="nav-icon-btn" title="Tài khoản của tôi"><i class="fas fa-user-circle"></i></a>
+        <a href="#" onclick="logout()" class="nav-icon-btn" title="Đăng xuất" style="color:#dc3545;"><i class="fas fa-sign-out-alt"></i></a>
+      <% } else { %>
+        <a href="/user/cart" class="nav-icon-btn" title="Giỏ hàng">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-badge cart-count" style="display:none;">0</span>
+        </a>
+        <a href="/user/login" class="btn-nav-login">Đăng nhập</a>
+      <% } %>
+
+      <button class="hamburger d-lg-none" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="mobileMenu" style="position:fixed;top:80px;left:0;right:0;background:rgba(255,249,251,0.98);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--border);padding:20px 24px;z-index:998;display:none;flex-direction:column;gap:4px;box-shadow:0 8px 32px rgba(0,0,0,0.08);">
+  <div style="margin-bottom:12px;">
+    <input type="text" placeholder="Tìm sản phẩm..." style="width:100%;padding:10px 16px;border:2px solid var(--border);border-radius:99px;font-family:var(--font-body);font-size:0.92rem;outline:none;background:var(--bg2);" onkeydown="if(event.key==='Enter') window.location.href='/products?search='+encodeURIComponent(this.value)">
+  </div>
+  <a href="/" style="font-weight:700;font-size:1rem;color:var(--dark);padding:10px 0;border-bottom:1px solid var(--border);display:block;">🏠 Trang chủ</a>
+  <a href="/products" style="font-weight:700;font-size:1rem;color:var(--dark);padding:10px 0;border-bottom:1px solid var(--border);display:block;">🛍️ Sản phẩm</a>
+  <a href="/blog" style="font-weight:700;font-size:1rem;color:var(--dark);padding:10px 0;border-bottom:1px solid var(--border);display:block;">📝 Blog</a>
+  <a href="/about" style="font-weight:700;font-size:1rem;color:var(--dark);padding:10px 0;border-bottom:1px solid var(--border);display:block;">🐾 Về chúng tôi</a>
+  <% if (typeof user !== 'undefined' && user && user.role==='admin') { %><a href="/admin" style="font-weight:700;font-size:1rem;color:#E85D28;padding:10px 0;border-bottom:1px solid var(--border);display:block;">🛡️ Quản trị</a><% } %>
+  <% if (typeof user !== 'undefined' && user) { %>
+  <a href="/order/my-orders" style="font-weight:700;font-size:1rem;color:var(--dark);padding:10px 0;border-bottom:1px solid var(--border);display:block;">📦 Đơn hàng</a>
+  <a href="/user/profile" style="font-weight:700;font-size:1rem;color:var(--dark);padding:10px 0;border-bottom:1px solid var(--border);display:block;">👤 Tài khoản</a>
+  <a href="#" onclick="logout()" style="font-weight:700;font-size:1rem;color:#dc3545;padding:10px 0;display:block;">🚪 Đăng xuất</a>
+  <% } else { %>
+  <a href="/user/login" style="font-weight:700;font-size:1rem;color:var(--primary-dark);padding:10px 0;display:block;">🔑 Đăng nhập</a>
+  <% } %>
+</div>

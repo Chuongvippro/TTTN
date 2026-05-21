@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= post.title %> — Pawmie Blog</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+  <style>
+    body { background: #f9fafb; font-family: 'Nunito', sans-serif; }
+    main { padding: 40px 0 80px; }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb-wrap { margin-bottom: 28px; }
+    .breadcrumb { background: none; padding: 0; margin: 0; font-size: 0.88rem; font-weight: 600; }
+    .breadcrumb-item a { color: #E85D28; text-decoration: none; }
+    .breadcrumb-item.active { color: #888; }
+    .breadcrumb-item + .breadcrumb-item::before { color: #ccc; }
+
+    /* ── Article ── */
+    .article-card {
+      background: #fff; border-radius: 24px;
+      border: 1.5px solid #f0f0f0;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+    }
+    .article-thumbnail {
+      width: 100%; max-height: 420px; object-fit: cover;
+    }
+    .article-body { padding: 36px 40px; }
+
+    .article-cat {
+      display: inline-block; background: #fff3ee; color: #E85D28;
+      border-radius: 99px; padding: 4px 14px; font-size: 0.8rem;
+      font-weight: 800; margin-bottom: 14px; text-decoration: none;
+    }
+    .article-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 2rem; font-weight: 800; color: #222;
+      line-height: 1.3; margin-bottom: 16px;
+    }
+    .article-meta {
+      display: flex; align-items: center; gap: 20px;
+      padding: 14px 0; border-top: 1.5px solid #f5f5f5;
+      border-bottom: 1.5px solid #f5f5f5;
+      margin-bottom: 28px; font-size: 0.85rem;
+      color: #888; font-weight: 600; flex-wrap: wrap;
+    }
+    .article-meta i { margin-right: 5px; color: #E85D28; }
+
+    /* ── Content typography ── */
+    .article-content { line-height: 1.9; color: #444; font-size: 1rem; }
+    .article-content h2, .article-content h3 {
+      font-family: 'Baloo 2', cursive;
+      color: #222; margin-top: 28px; margin-bottom: 12px;
+    }
+    .article-content h2 { font-size: 1.5rem; }
+    .article-content h3 { font-size: 1.2rem; color: #E85D28; }
+    .article-content p  { margin-bottom: 16px; }
+    .article-content ul, .article-content ol { padding-left: 24px; margin-bottom: 16px; }
+    .article-content li { margin-bottom: 6px; }
+    .article-content img { max-width: 100%; border-radius: 12px; margin: 16px 0; }
+    .article-content blockquote {
+      border-left: 4px solid #E85D28; padding: 12px 20px;
+      background: #fff8f5; border-radius: 0 12px 12px 0;
+      color: #555; font-style: italic; margin: 20px 0;
+    }
+    .article-content strong { color: #222; }
+
+    /* ── Share buttons ── */
+    .share-wrap {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 32px; padding-top: 24px;
+      border-top: 2px dashed #f0f0f0; flex-wrap: wrap;
+    }
+    .share-label { font-weight: 800; color: #333; font-size: 0.9rem; }
+    .share-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 700; text-decoration: none;
+      transition: all 0.2s; border: none; cursor: pointer;
+    }
+    .share-fb  { background: #1877f2; color: #fff; }
+    .share-tw  { background: #1da1f2; color: #fff; }
+    .share-cp  { background: #f0f0f0; color: #555; }
+    .share-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* ── Comments ── */
+    .comments-section {
+      background: #fff; border-radius: 20px;
+      padding: 28px 32px; margin-top: 24px;
+      border: 1.5px solid #f0f0f0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+    }
+    .comments-title {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 700; font-size: 1.3rem; color: #333;
+      margin-bottom: 24px; padding-bottom: 16px;
+      border-bottom: 2px dashed #f0f0f0;
+    }
+
+    .comment-card {
+      display: flex; gap: 14px;
+      padding: 16px 0; border-bottom: 1px solid #f5f5f5;
+    }
+    .comment-card:last-of-type { border-bottom: none; }
+    .comment-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, #E85D28, #ff8c5a);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #fff; font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .comment-name { font-weight: 800; color: #222; font-size: 0.92rem; }
+    .comment-date { font-size: 0.78rem; color: #aaa; margin-left: 8px; font-weight: 600; }
+    .comment-text { color: #555; font-size: 0.92rem; line-height: 1.6; margin-top: 4px; }
+
+    /* Form bình luận */
+    .comment-form-wrap {
+      margin-top: 24px; padding: 20px;
+      background: #fafafa; border-radius: 14px;
+      border: 1.5px solid #f0f0f0;
+    }
+    .comment-form-title {
+      font-weight: 800; color: #333; font-size: 0.95rem; margin-bottom: 12px;
+    }
+    .comment-textarea {
+      width: 100%; padding: 12px 16px;
+      border: 1.5px solid #e8e8e8; border-radius: 12px;
+      font-family: 'Nunito', sans-serif; font-size: 0.95rem;
+      resize: vertical; min-height: 90px; outline: none;
+      transition: border-color 0.2s;
+    }
+    .comment-textarea:focus { border-color: #E85D28; }
+    .btn-comment {
+      background: #E85D28; color: #fff; border: none;
+      padding: 10px 24px; border-radius: 10px;
+      font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 0.95rem; cursor: pointer; margin-top: 10px;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-comment:hover { background: #d65120; transform: translateY(-1px); }
+
+    /* ── Sidebar ── */
+    .widget {
+      background: #fff; border-radius: 16px; padding: 20px;
+      border: 1.5px solid #f0f0f0; margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .widget-title {
+      font-family: 'Baloo 2', cursive; font-weight: 700;
+      font-size: 1rem; color: #333; margin-bottom: 14px;
+      padding-bottom: 12px; border-bottom: 2px dashed #f0f0f0;
+    }
+    .related-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 8px 0; border-bottom: 1px solid #f5f5f5;
+      text-decoration: none;
+    }
+    .related-item:last-child { border-bottom: none; }
+    .related-item img {
+      width: 60px; height: 60px; object-fit: cover;
+      border-radius: 10px; flex-shrink: 0;
+    }
+    .related-item-title {
+      font-size: 0.88rem; font-weight: 700; color: #333; line-height: 1.4;
+    }
+    .related-item-title:hover { color: #E85D28; }
+    .related-item-meta { font-size: 0.75rem; color: #aaa; margin-top: 3px; }
+
+    .cat-tag {
+      display: inline-block; padding: 5px 14px;
+      border-radius: 99px; border: 1.5px solid #e8e8e8;
+      font-size: 0.83rem; font-weight: 700; color: #555;
+      margin: 0 4px 8px 0; text-decoration: none; transition: all 0.2s;
+    }
+    .cat-tag:hover { background: #E85D28; color: #fff; border-color: #E85D28; }
+
+    @media (max-width: 767px) {
+      .article-body { padding: 24px 20px; }
+      .article-title { font-size: 1.5rem; }
+      .comments-section { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <main>
+    <div class="container">
+      <!-- Breadcrumb -->
+      <div class="breadcrumb-wrap">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="/blog">Blog</a></li>
+            <% if (post.category_name) { %>
+              <li class="breadcrumb-item">
+                <a href="/blog?category=<%= post.category_slug %>"><%= post.category_name %></a>
+              </li>
+            <% } %>
+            <li class="breadcrumb-item active"><%= post.title.substring(0, 40) %>...</li>
+          </ol>
+        </nav>
+      </div>
+
+      <div class="row g-4">
+
+        <!-- ── Bài viết ── -->
+        <div class="col-lg-8">
+          <div class="article-card">
+
+            <% if (post.thumbnail) { %>
+              <img class="article-thumbnail"
+                src="/<%= post.thumbnail %>"
+                alt="<%= post.title %>"
+                onerror="this.src='https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&q=80'">
+            <% } else { %>
+              <img class="article-thumbnail"
+                src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=900&q=80"
+                alt="<%= post.title %>">
+            <% } %>
+
+            <div class="article-body">
+              <% if (post.category_name) { %>
+                <a href="/blog?category=<%= post.category_slug %>" class="article-cat">
+                  <%= post.category_name %>
+                </a>
+              <% } %>
+
+              <h1 class="article-title"><%= post.title %></h1>
+
+              <div class="article-meta">
+                <% if (post.author_name) { %>
+                  <span><i class="fas fa-user"></i><%= post.author_name %></span>
+                <% } %>
+                <span>
+                  <i class="fas fa-calendar-alt"></i>
+                  <%= new Date(post.created_at).toLocaleDateString('vi-VN', { day:'2-digit', month:'long', year:'numeric' }) %>
+                </span>
+                <span><i class="fas fa-eye"></i><%= post.views %> lượt xem</span>
+                <span><i class="fas fa-comment"></i><%= comments.length %> bình luận</span>
+              </div>
+
+              <div class="article-content">
+                <%- post.content %>
+              </div>
+
+              <!-- Share -->
+              <div class="share-wrap">
+                <span class="share-label">Chia sẻ:</span>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent('http://localhost:8084/blog/' + post.slug) %>"
+                  target="_blank" class="share-btn share-fb">
+                  <i class="fab fa-facebook-f"></i> Facebook
+                </a>
+                <a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent('http://localhost:8084/blog/' + post.slug) %>&text=<%= encodeURIComponent(post.title) %>"
+                  target="_blank" class="share-btn share-tw">
+                  <i class="fab fa-twitter"></i> Twitter
+                </a>
+                <button class="share-btn share-cp" onclick="copyLink()">
+                  <i class="fas fa-link"></i> Copy link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Bình luận ── -->
+          <div class="comments-section">
+            <div class="comments-title">
+              <i class="fas fa-comments me-2" style="color:#E85D28;"></i>
+              Bình luận (<%= comments.length %>)
+            </div>
+
+            <!-- Danh sách comment -->
+            <div id="commentList">
+              <% if (comments.length === 0) { %>
+                <div style="text-align:center;padding:24px;color:#aaa;">
+                  <i class="fas fa-comment-slash fa-2x mb-2 d-block"></i>
+                  Chưa có bình luận. Hãy là người đầu tiên!
+                </div>
+              <% } else { %>
+                <% comments.forEach(c => { %>
+                <div class="comment-card">
+                  <div class="comment-avatar">
+                    <%= c.user_name ? c.user_name.charAt(0).toUpperCase() : 'U' %>
+                  </div>
+                  <div style="flex:1;">
+                    <div>
+                      <span class="comment-name"><%= c.user_name || 'Ẩn danh' %></span>
+                      <span class="comment-date">
+                        <%= new Date(c.created_at).toLocaleDateString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) %>
+                      </span>
+                    </div>
+                    <p class="comment-text"><%= c.content %></p>
+                  </div>
+                </div>
+                <% }) %>
+              <% } %>
+            </div>
+
+            <!-- Form bình luận -->
+            <div class="comment-form-wrap">
+              <% if (!user) { %>
+                <div style="text-align:center;padding:10px;">
+                  <i class="fas fa-lock me-2" style="color:#E85D28;"></i>
+                  <a href="/user/login" style="color:#E85D28;font-weight:800;">Đăng nhập</a>
+                  để bình luận bài viết này.
+                </div>
+              <% } else { %>
+                <div class="comment-form-title">
+                  <i class="fas fa-pen me-2" style="color:#E85D28;"></i>
+                  Viết bình luận của bạn
+                </div>
+                <textarea class="comment-textarea" id="commentText"
+                  placeholder="Chia sẻ suy nghĩ của bạn..."></textarea>
+                <div>
+                  <button class="btn-comment" onclick="submitComment()">
+                    <i class="fas fa-paper-plane"></i> Gửi bình luận
+                  </button>
+                </div>
+              <% } %>
+            </div>
+          </div>
+
+        </div><!-- /col -->
+
+        <!-- ── Sidebar ── -->
+        <div class="col-lg-4">
+
+          <!-- Danh mục -->
+          <div class="widget">
+            <div class="widget-title">
+              <i class="fas fa-tags me-2" style="color:#E85D28;"></i>Danh mục
+            </div>
+            <a href="/blog" class="cat-tag">Tất cả</a>
+            <% categories.forEach(cat => { %>
+              <a href="/blog?category=<%= cat.slug %>" class="cat-tag">
+                <%= cat.name %>
+                <span style="font-size:0.75rem;background:#f0f0f0;border-radius:99px;padding:1px 7px;margin-left:4px;color:#888;">
+                  <%= cat.post_count %>
+                </span>
+              </a>
+            <% }) %>
+          </div>
+
+          <!-- Bài liên quan -->
+          <% if (related && related.length > 0) { %>
+          <div class="widget">
+            <div class="widget-title">
+              <i class="fas fa-newspaper me-2" style="color:#E85D28;"></i>Bài viết liên quan
+            </div>
+            <% related.forEach(r => { %>
+            <a href="/blog/<%= r.slug %>" class="related-item">
+              <img
+                src="/<%= r.thumbnail || '' %>"
+                alt="<%= r.title %>"
+                onerror="this.src='https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=200&q=60'"
+              >
+              <div>
+                <div class="related-item-title"><%= r.title %></div>
+                <div class="related-item-meta">
+                  <i class="fas fa-calendar-alt me-1"></i>
+                  <%= new Date(r.created_at).toLocaleDateString('vi-VN') %>
+                </div>
+              </div>
+            </a>
+            <% }) %>
+          </div>
+          <% } %>
+
+          <!-- Banner -->
+          <div style="background:linear-gradient(135deg,#E85D28,#ff8c5a);border-radius:16px;padding:24px;text-align:center;color:#fff;">
+            <div style="font-size:2.5rem;margin-bottom:8px;">🐾</div>
+            <div style="font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:800;margin-bottom:8px;">
+              Mua sắm cho bé yêu
+            </div>
+            <p style="font-size:0.85rem;opacity:0.9;margin-bottom:16px;">
+              Phụ kiện cao cấp dành riêng cho thú cưng
+            </p>
+            <a href="/products" style="display:inline-block;background:#fff;color:#E85D28;
+              border-radius:10px;padding:10px 20px;font-weight:800;font-size:0.9rem;
+              text-decoration:none;">
+              Xem ngay →
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script>
+    const POST_ID = '<%= post.id %>';
+
+    async function submitComment() {
+      const content = document.getElementById('commentText').value.trim();
+      if (!content) { showToast('Vui lòng nhập nội dung bình luận!', 'warning'); return; }
+
+      const btn = event.target;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+
+      try {
+        const res = await callAPI('/blog/comment', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ postId: POST_ID, content }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message);
+
+        showToast('Bình luận thành công! 🐾', 'success');
+        document.getElementById('commentText').value = '';
+        setTimeout(() => location.reload(), 1200);
+      } catch (err) {
+        showToast(err.message || 'Gửi thất bại!', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Gửi bình luận';
+      }
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('Đã copy link! 🔗', 'success');
+      });
+    }
+  </script>
+
+</body>
+</html>

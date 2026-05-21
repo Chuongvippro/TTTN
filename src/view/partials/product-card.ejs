@@ -1,0 +1,61 @@
+<%# partials/product-card.ejs
+    Cần truyền vào: product object với các field:
+    id, name, price, originalPrice, image, category, rating, reviewCount, badge, categorySlug
+%>
+<div class="product-card"
+  data-category="<%= product.categorySlug || '' %>"
+  data-sale="<%= product.originalPrice ? 'true' : 'false' %>">
+
+  <div class="product-img-wrap">
+    <% if (product.badge) { %>
+      <span class="product-badge
+        <%= product.badge === 'Sale' || product.badge === 'sale' ? 'sale' : '' %>
+        <%= product.badge === 'Mới' || product.badge === 'new'  ? 'new'  : '' %>
+      ">
+        <%= product.badge %>
+      </span>
+    <% } %>
+    <button class="product-wish" onclick="toggleWishlist(this, '<%= product.id %>')" aria-label="Yêu thích">
+      <i class="far fa-heart"></i>
+    </button>
+    <a href="/products/detail/<%= product.id %>">
+      <img
+        src="<%= product.img || '/images/placeholder.png' %>"
+        alt="<%= product.name %>"
+        loading="lazy"
+      >
+    </a>
+  </div>
+
+  <div class="product-body">
+    <div class="product-category"><%= product.category || product.categoryName || '' %></div>
+
+    <a href="/products/detail/<%= product.id %>" class="product-name"><%= product.name %></a>
+
+    <div class="product-rating">
+      <span class="stars">
+        <% const rating = parseFloat(product.rating) || 0;
+           for(let i = 1; i <= 5; i++) { %>
+          <%= i <= Math.round(rating) ? '★' : '☆' %>
+        <% } %>
+      </span>
+      <span class="rating-count">(<%= product.reviewCount || product.review_count || 0 %>)</span>
+    </div>
+
+    <div class="product-price-row">
+      <span class="product-price">
+        <%= parseInt(product.price).toLocaleString('vi-VN') %>₫
+      </span>
+      <% if (product.originalPrice || product.original_price) {
+         const oldPrice = product.originalPrice || product.original_price; %>
+        <span class="product-price-old">
+          <%= parseInt(oldPrice).toLocaleString('vi-VN') %>₫
+        </span>
+      <% } %>
+    </div>
+
+    <button class="btn-add-cart" onclick="addToCart('<%= product.id %>', this)">
+      <i class="fas fa-shopping-bag"></i> Thêm vào giỏ
+    </button>
+  </div>
+</div>

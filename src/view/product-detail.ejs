@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title + ' — ' : '' %>Pawmie Pet Shop</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+
+  <%- include('partials/navbar') %>
+
+  <main>
+    <div class="container breadcrumb-wrap">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+          <li class="breadcrumb-item"><a href="/products">Sản phẩm</a></li>
+          <% if (product && product.category) { %>
+            <li class="breadcrumb-item">
+              <a href="/products?category=<%= product.categorySlug || '' %>"><%= product.category %></a>
+            </li>
+          <% } %>
+          <li class="breadcrumb-item active" aria-current="page">
+            <%= product ? product.name : 'Chi tiết sản phẩm' %>
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+    <section class="detail-page">
+      <div class="container">
+        <div class="row g-5">
+
+          <div class="col-lg-5">
+            <div class="product-gallery">
+              <div class="gallery-main" id="galleryMain">
+                <img
+                  id="mainImg"
+                  src="<%= product && product.images && product.images[0] ? product.images[0] : 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?w=700&q=80' %>"
+                  alt="<%= product ? product.name : 'Sản phẩm' %>"
+                >
+              </div>
+              <% const imgs = (product && product.images && product.images.length > 0)
+                   ? product.images
+                   : [
+                       'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?w=400&q=80',
+                       'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80',
+                       'https://images.unsplash.com/photo-1601758123927-196f78426b69?w=400&q=80',
+                       'https://images.unsplash.com/photo-1546421845-6471bdcf3edf?w=400&q=80'
+                     ];
+              %>
+              <div class="gallery-thumbs">
+                <% imgs.forEach((img, i) => { %>
+                  <div class="gallery-thumb <%= i === 0 ? 'active' : '' %>" onclick="switchImg('<%= img %>', this)">
+                    <img src="<%= img %>" alt="Ảnh <%= i+1 %>">
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <div class="product-info-wrap">
+
+              <% if (product && product.category) { %>
+                <div class="detail-category">
+                  <i class="fas fa-tag"></i> <%= product.category %>
+                </div>
+              <% } %>
+
+              <h1 class="detail-name">
+                <%= product ? product.name : 'Tên sản phẩm' %>
+              </h1>
+
+              <div class="detail-rating">
+                <span class="stars" style="font-size:1.05rem;">
+                  <% const pRating = parseFloat(product && product.rating ? product.rating : 4.8);
+                     for(let i=1;i<=5;i++){ %>
+                    <%= i <= Math.round(pRating) ? '★' : '☆' %>
+                  <% } %>
+                </span>
+                <span class="rating-num fw-800"><%= pRating %></span>
+                <span class="review-count">
+                  (<%= product && product.reviewCount ? product.reviewCount : 0 %> đánh giá)
+                </span>
+                <% if (product && product.soldCount) { %>
+                  <span style="font-size:0.85rem;color:var(--text-light);">
+                    | Đã bán: <strong><%= product.soldCount %></strong>
+                  </span>
+                <% } %>
+              </div>
+
+              <div class="detail-divider"></div>
+
+              <div class="detail-price-row">
+                <span class="detail-price">
+                  <%= product ? parseInt(product.price).toLocaleString('vi-VN') : '0' %>₫
+                </span>
+                <% if (product && (product.originalPrice || product.original_price)) {
+                   const oldP = product.originalPrice || product.original_price;
+                   const discount = Math.round((1 - product.price / oldP) * 100); %>
+                  <span class="detail-price-old">
+                    <%= parseInt(oldP).toLocaleString('vi-VN') %>₫
+                  </span>
+                  <span class="detail-discount-badge">-<%= discount %>%</span>
+                <% } %>
+              </div>
+
+              <% const stock = product && product.stock ? parseInt(product.stock) : 99; %>
+              <div class="detail-stock">
+                <% if (stock > 10) { %>
+                  <span class="in-stock"><i class="fas fa-check-circle me-1"></i>Còn hàng (<%= stock %> sản phẩm)</span>
+                <% } else if (stock > 0) { %>
+                  <span style="color:#F59E0B;font-weight:700;"><i class="fas fa-exclamation-circle me-1"></i>Sắp hết hàng (còn <%= stock %>)</span>
+                <% } else { %>
+                  <span class="out-stock"><i class="fas fa-times-circle me-1"></i>Hết hàng</span>
+                <% } %>
+              </div>
+
+              <div class="detail-divider"></div>
+
+              <div class="d-flex align-items-center mb-4" style="gap:16px;flex-wrap:wrap;">
+                <span class="qty-label">Số lượng:</span>
+                <div class="qty-wrap">
+                  <button class="qty-btn" onclick="changeQty(-1)" type="button">−</button>
+                  <input class="qty-input" type="number" id="qtyInput" value="1" min="1" max="<%= stock %>">
+                  <button class="qty-btn" onclick="changeQty(1)" type="button">+</button>
+                </div>
+              </div>
+
+              <div class="detail-actions">
+                <button class="btn-buy-now" onclick="buyNow('<%= product ? product.id : '' %>')">
+                  <i class="fas fa-bolt"></i> Mua ngay
+                </button>
+                <button class="btn-cart-detail" onclick="addToCart('<%= product ? product.id : '' %>', this)">
+                  <i class="fas fa-shopping-bag"></i> Thêm vào giỏ
+                </button>
+                <button class="btn-wishlist-detail" onclick="toggleWishlist(this, '<%= product ? product.id : '' %>')" id="wishBtn" aria-label="Yêu thích">
+                  <i class="far fa-heart"></i>
+                </button>
+              </div>
+
+              <div style="display:flex;gap:20px;flex-wrap:wrap;padding:16px;background:var(--bg2);border-radius:var(--radius);border:1.5px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:600;color:var(--text);">
+                  <span style="color:var(--primary);font-size:1.1rem;">🚚</span> Freeship đơn từ 299k
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:600;color:var(--text);">
+                  <span style="font-size:1.1rem;">🔄</span> Đổi trả 7 ngày
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:600;color:var(--text);">
+                  <span style="font-size:1.1rem;">✅</span> Hàng chính hãng
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:600;color:var(--text);">
+                  <span style="font-size:1.1rem;">💳</span> Thanh toán an toàn
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-tabs mt-5">
+          <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('desc', this)">📋 Mô tả sản phẩm</button>
+            <button class="tab-btn" onclick="switchTab('reviews', this); loadReviews('<%= product ? product.id : '' %>')">
+              ⭐ Đánh giá (<%= product && product.reviewCount ? product.reviewCount : 0 %>)
+            </button>
+            <button class="tab-btn" onclick="switchTab('shipping', this)">🚚 Vận chuyển</button>
+          </div>
+
+          <div class="tab-panel active" id="tab-desc">
+            <div class="detail-desc">
+              <% if (product && product.description) { %>
+                <%- product.description %>
+              <% } else { %>
+                <p>Sản phẩm được làm từ chất liệu cao cấp, an toàn cho thú cưng. Thiết kế tinh tế, phù hợp với nhiều giống loài và kích cỡ khác nhau.</p>
+                <p>Chúng tôi cam kết chỉ cung cấp những sản phẩm đã qua kiểm định chất lượng nghiêm ngặt, đảm bảo sức khỏe và sự thoải mái cho thú cưng của bạn.</p>
+                <p>Sản phẩm đi kèm hướng dẫn sử dụng đầy đủ và hỗ trợ bảo hành theo chính sách cửa hàng.</p>
+              <% } %>
+
+              <% if (product && product.brand) { %>
+                <p><strong>Thương hiệu:</strong> <%= product.brand %></p>
+              <% } %>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="tab-reviews" style="display: none;">
+            
+            <div class="review-form-wrap mb-4 p-4" style="background: var(--bg2, #f8f9fa); border-radius: 8px; border: 1px solid #eee;">
+              <h5 class="mb-3 fw-bold">Viết đánh giá của bạn</h5>
+              <form id="reviewForm" onsubmit="submitReview(event, '<%= product ? product.id : '' %>')">
+                
+                <div class="mb-3 d-flex align-items-center">
+                  <label class="me-3 fw-semibold">Chất lượng sản phẩm:</label>
+                  <div class="star-rating-input" id="starInput" style="font-size: 1.5rem; cursor: pointer;">
+                    <i class="fas fa-star text-warning" data-value="1" onclick="setRating(1)"></i>
+                    <i class="fas fa-star text-warning" data-value="2" onclick="setRating(2)"></i>
+                    <i class="fas fa-star text-warning" data-value="3" onclick="setRating(3)"></i>
+                    <i class="fas fa-star text-warning" data-value="4" onclick="setRating(4)"></i>
+                    <i class="fas fa-star text-warning" data-value="5" onclick="setRating(5)"></i>
+                  </div>
+                  <input type="hidden" id="ratingValue" name="rating" value="5">
+                  <span id="ratingText" class="ms-3 text-warning fw-bold">Tuyệt vời</span>
+                </div>
+
+                <div class="mb-3">
+                  <textarea class="form-control" id="reviewComment" rows="3" placeholder="Hãy chia sẻ cảm nhận của bạn về sản phẩm này nhé..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary px-4" id="btnSubmitReview" style="background-color: var(--primary, #ff6b81); border: none;">
+                  <i class="fas fa-paper-plane me-1"></i> Gửi đánh giá
+                </button>
+              </form>
+            </div>
+
+            <div id="review-list-container">
+              <div class="text-center text-muted">
+                Nhấn vào tab để tải đánh giá...
+              </div>
+            </div>
+
+          </div>
+
+          <div class="tab-panel" id="tab-shipping" style="display: none;">
+            <div class="detail-desc">
+              <p><strong>🚚 Vận chuyển toàn quốc</strong> — Giao hàng trong 2–5 ngày làm việc.</p>
+              <p><strong>⚡ Giao nhanh trong ngày</strong> — Áp dụng nội thành TP.HCM và Hà Nội với đơn đặt trước 12:00.</p>
+              <p><strong>📦 Miễn phí vận chuyển</strong> — Cho đơn hàng từ 299.000₫ trở lên.</p>
+              <p><strong>🔄 Đổi trả dễ dàng</strong> — Hỗ trợ đổi trả trong 7 ngày kể từ ngày nhận hàng nếu sản phẩm lỗi do nhà sản xuất.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="related-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-tag"><i class="fas fa-heart me-1"></i> Gợi ý cho bạn</div>
+          <h2 class="section-title">Sản phẩm <span>liên quan</span></h2>
+        </div>
+
+        <div class="products-grid">
+          <% if (typeof relatedProducts !== 'undefined' && relatedProducts.length > 0) { %>
+            <% relatedProducts.slice(0,4).forEach(p => { %>
+              <%- include('partials/product-card', { product: p }) %>
+            <% }) %>
+          <% } else { %>
+            <% [
+              { id:10, name:'Vòng cổ hạt dẻ cho chó', price:75000, originalPrice:null, image:'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80', category:'Phụ kiện chó', rating:4.7, reviewCount:93, badge:null, categorySlug:'dog' },
+              { id:11, name:'Đồ chơi chuột nhồi bông', price:55000, originalPrice:80000, image:'https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=400&q=80', category:'Đồ chơi mèo', rating:4.8, reviewCount:211, badge:'Sale', categorySlug:'cat' },
+              { id:12, name:'Lược chải lông thú cưng', price:110000, originalPrice:null, image:'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400&q=80', category:'Chăm sóc', rating:4.5, reviewCount:64, badge:'Mới', categorySlug:'care' },
+              { id:13, name:'Nệm vuông siêu êm', price:280000, originalPrice:350000, image:'https://images.unsplash.com/photo-1513245543132-31f507417b26?w=400&q=80', category:'Nhà & chuồng', rating:4.9, reviewCount:155, badge:'Sale', categorySlug:'dog' }
+            ].forEach(product => { %>
+              <div class="product-card">
+                <div class="product-img-wrap">
+                  <% if (product.badge) { %>
+                    <span class="product-badge <%= product.badge === 'Sale' ? 'sale' : product.badge === 'Mới' ? 'new' : '' %>"><%= product.badge %></span>
+                  <% } %>
+                  <button class="product-wish" onclick="toggleWishlist(this, <%= product.id %>)" aria-label="Yêu thích">
+                    <i class="far fa-heart"></i>
+                  </button>
+                  <a href="/products/<%= product.id %>">
+                    <img src="<%= product.image %>" alt="<%= product.name %>" loading="lazy">
+                  </a>
+                </div>
+                <div class="product-body">
+                  <div class="product-category"><%= product.category %></div>
+                  <a href="/products/<%= product.id %>" class="product-name"><%= product.name %></a>
+                  <div class="product-rating">
+                    <span class="stars">
+                      <% for(let i=1;i<=5;i++){ %><%= i<=Math.round(product.rating)?'★':'☆' %><% } %>
+                    </span>
+                    <span class="rating-count">(<%= product.reviewCount %>)</span>
+                  </div>
+                  <div class="product-price-row">
+                    <span class="product-price"><%= product.price.toLocaleString('vi-VN') %>₫</span>
+                    <% if (product.originalPrice) { %>
+                      <span class="product-price-old"><%= product.originalPrice.toLocaleString('vi-VN') %>₫</span>
+                    <% } %>
+                  </div>
+                  <button class="btn-add-cart" onclick="addToCart(<%= product.id %>, this)">
+                    <i class="fas fa-shopping-bag"></i> Thêm vào giỏ
+                  </button>
+                </div>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/home.js"></script>
+  <script src="/js/product.api.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh toán — Pawmie Pet Shop</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&family=Nunito:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+
+  <style>
+    body {
+      background: #f9fafb;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .checkout-wrap {
+      padding: 40px 0 80px;
+    }
+
+    .page-title {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 800;
+      font-size: 2rem;
+      color: #222;
+      margin-bottom: 32px;
+    }
+
+    /* ── Form card ── */
+    .form-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      border: 1.5px solid #f0f0f0;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .form-card-title {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-weight: 700;
+      color: #444;
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      border: 1.5px solid #e8e8e8;
+      padding: 11px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: #E85D28;
+      box-shadow: 0 0 0 3px rgba(232, 93, 40, 0.1);
+    }
+
+    /* ── Phương thức thanh toán ── */
+    .pay-method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .pay-method-card {
+      border: 2px solid #e8e8e8;
+      border-radius: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .pay-method-card:hover {
+      border-color: #E85D28;
+      background: #fff8f5;
+    }
+
+    .pay-method-card.selected {
+      border-color: #E85D28;
+      background: #fff3ee;
+      box-shadow: 0 0 0 3px rgba(232, 93, 40, 0.12);
+    }
+
+    .pay-method-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .pay-method-name {
+      font-weight: 800;
+      font-size: 1rem;
+      color: #222;
+    }
+
+    .pay-method-desc {
+      font-size: 0.82rem;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    /* Thông tin chuyển khoản */
+    #transferInfo {
+      display: none;
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      border: 1.5px solid #bae6fd;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+
+    .bank-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(186, 230, 253, 0.5);
+      font-size: 0.95rem;
+    }
+
+    .bank-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .bank-label {
+      color: #555;
+      font-weight: 600;
+    }
+
+    .bank-value {
+      font-weight: 800;
+      color: #0369a1;
+      font-size: 1rem;
+    }
+
+    .btn-copy {
+      background: none;
+      border: 1.5px solid #0369a1;
+      color: #0369a1;
+      border-radius: 8px;
+      padding: 3px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-copy:hover {
+      background: #0369a1;
+      color: #fff;
+    }
+
+    .transfer-note {
+      background: #fffbeb;
+      border: 1.5px solid #fcd34d;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 14px;
+      font-size: 0.88rem;
+      color: #78350f;
+      font-weight: 600;
+    }
+
+    /* ── Order summary ── */
+    .summary-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 26px;
+      border: 1.5px solid #f0f0f0;
+      position: sticky;
+      top: 90px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .summary-title {
+      font-family: 'Baloo 2', cursive;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px dashed #f0f0f0;
+    }
+
+    .summary-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .summary-item:last-of-type {
+      border-bottom: none;
+    }
+
+    .summary-item img {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #eee;
+    }
+
+    .summary-item-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #333;
+    }
+
+    .summary-item-qty {
+      font-size: 0.82rem;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .summary-item-price {
+      font-weight: 800;
+      color: #E85D28;
+      font-size: 0.95rem;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .summary-total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 0 0;
+      margin-top: 10px;
+      border-top: 2px dashed #f0f0f0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #222;
+    }
+
+    .summary-total-price {
+      color: #E85D28;
+    }
+
+    .btn-place-order {
+      width: 100%;
+      background: #E85D28;
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .btn-place-order:hover:not(:disabled) {
+      background: #d65120;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(232, 93, 40, 0.3);
+    }
+
+    .btn-place-order:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* ── Success popup ── */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup-overlay.show {
+      display: flex;
+    }
+
+    .popup-box {
+      background: #fff;
+      border-radius: 24px;
+      padding: 44px 40px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .popup-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      animation: bounce 0.6s ease 0.3s both;
+    }
+
+    @keyframes bounce {
+      0% {
+        transform: scale(0);
+      }
+
+      60% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .popup-title {
+      font-family: 'Baloo 2', cursive;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .popup-order-id {
+      font-size: 1rem;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .popup-order-id strong {
+      color: #E85D28;
+      font-size: 1.1rem;
+    }
+
+    .popup-desc {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .popup-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #E85D28;
+      color: #fff;
+      border: none;
+      padding: 13px 32px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      transition: all 0.25s;
+    }
+
+    .popup-btn:hover {
+      background: #d65120;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 767px) {
+      .pay-method-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .popup-box {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <%- include('partials/navbar') %>
+
+    <main class="checkout-wrap">
+      <div class="container">
+
+        <h1 class="page-title">
+          <i class="fas fa-lock me-2" style="color:#E85D28;font-size:1.6rem;"></i>
+          Thanh toán
+        </h1>
+
+        <div class="row g-4">
+
+          <!-- ══ CỘT TRÁI: FORM ══ -->
+          <div class="col-lg-7">
+
+            <!-- 1. Thông tin giao hàng -->
+            <div class="form-card">
+              <div class="form-card-title">
+                <span style="color:#E85D28;">📦</span> Thông tin giao hàng
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Họ tên người nhận <span style="color:red">*</span></label>
+                <input type="text" class="form-control" id="fullName" placeholder="Nguyễn Văn A"
+                  value="<%= typeof user !== 'undefined' && user ? (user.user_name || user.username || '') : '' %>">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Số điện thoại <span style="color:red">*</span></label>
+                <input type="tel" class="form-control" id="phone" placeholder="0901 234 567"
+                  value="<%= typeof user !== 'undefined' && user && user.phone ? user.phone : '' %>">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Địa chỉ giao hàng <span style="color:red">*</span></label>
+                <input type="text" class="form-control" id="address" placeholder="123 Đường ABC, Phường XYZ, TP.HCM"
+                  value="<%= typeof user !== 'undefined' && user && user.address ? user.address : '' %>">
+              </div>
+
+              <div>
+                <label class="form-label">Ghi chú đơn hàng</label>
+                <textarea class="form-control" id="note" rows="3"
+                  placeholder="VD: Giao buổi sáng, gọi trước khi đến..."></textarea>
+              </div>
+            </div>
+
+            <!-- 2. Phương thức thanh toán -->
+            <div class="form-card">
+              <div class="form-card-title">
+                <span style="color:#E85D28;">💳</span> Phương thức thanh toán
+              </div>
+
+              <div class="pay-method-grid">
+
+                <!-- Tiền mặt -->
+                <div class="pay-method-card selected" id="card-cash" onclick="selectPayment('cash')">
+                  <div class="pay-method-icon" style="background:#fff8f0;">💵</div>
+                  <div>
+                    <div class="pay-method-name">Tiền mặt</div>
+                    <div class="pay-method-desc">Thanh toán khi nhận hàng (COD)</div>
+                  </div>
+                </div>
+
+                <!-- Chuyển khoản -->
+                <div class="pay-method-card" id="card-transfer" onclick="selectPayment('transfer')">
+                  <div class="pay-method-icon" style="background:#f0f9ff;">🏦</div>
+                  <div>
+                    <div class="pay-method-name">Chuyển khoản</div>
+                    <div class="pay-method-desc">Chuyển khoản ngân hàng</div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Thông tin chuyển khoản (ẩn mặc định) -->
+              <div id="transferInfo">
+                <div style="font-weight:800;color:#0369a1;margin-bottom:14px;font-size:1rem;">
+                  🏦 Thông tin tài khoản ngân hàng
+                </div>
+
+                <div class="bank-row">
+                  <span class="bank-label">Ngân hàng</span>
+                  <span class="bank-value">Ngân hàng STU</span>
+                </div>
+                <div class="bank-row">
+                  <span class="bank-label">Số tài khoản</span>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span class="bank-value" id="accountNumber">0123456789</span>
+                    <button class="btn-copy" onclick="copyText('0123456789', this)">
+                      <i class="fas fa-copy me-1"></i>Copy
+                    </button>
+                  </div>
+                </div>
+                <div class="bank-row">
+                  <span class="bank-label">Chủ tài khoản</span>
+                  <span class="bank-value">ĐẶNG NGUYỄN HIẾU TOÀN</span>
+                </div>
+                <div class="bank-row">
+                  <span class="bank-label">Số tiền</span>
+                  <span class="bank-value" id="transferAmount">0₫</span>
+                </div>
+                <div class="bank-row">
+                  <span class="bank-label">Nội dung CK</span>
+                  <div style="display:flex;align-items:center;gap:8px;">
+                    <span class="bank-value" id="transferContent">PAWMIE [Mã đơn sẽ tự điền]</span>
+                    <button class="btn-copy"
+                      onclick="copyText(document.getElementById('transferContent').innerText, this)">
+                      <i class="fas fa-copy me-1"></i>Copy
+                    </button>
+                  </div>
+                </div>
+
+                <div class="transfer-note">
+                  ⚠️ Vui lòng chuyển đúng số tiền và nội dung để đơn hàng được xác nhận nhanh nhất.
+                  Đơn hàng sẽ được xử lý sau khi chúng tôi xác nhận thanh toán.
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ══ CỘT PHẢI: TÓM TẮT ══ -->
+          <div class="col-lg-5">
+            <div class="summary-box">
+              <div class="summary-title">🛍️ Đơn hàng của bạn</div>
+
+              <!-- Danh sách sản phẩm - JS render vào đây -->
+              <div id="summaryItems">
+                <div class="text-center py-3">
+                  <i class="fas fa-spinner fa-spin" style="color:#E85D28;font-size:1.5rem;"></i>
+                </div>
+              </div>
+
+              <div style="margin-top:16px;padding-top:16px;border-top:2px dashed #f0f0f0;">
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.95rem;color:#666;margin-bottom:10px;">
+                  <span>Phí vận chuyển</span>
+                  <span style="color:#28a745;font-weight:700;">Miễn phí</span>
+                </div>
+                <div class="summary-total-row">
+                  <span>Tổng cộng</span>
+                  <span class="summary-total-price" id="totalDisplay">0₫</span>
+                </div>
+              </div>
+
+              <button class="btn-place-order" id="placeOrderBtn" onclick="submitOrder()">
+                <i class="fas fa-check-circle"></i> Đặt hàng ngay
+              </button>
+
+              <div style="text-align:center;margin-top:14px;">
+                <a href="/user/cart" style="color:#888;font-size:0.88rem;font-weight:600;text-decoration:none;">
+                  <i class="fas fa-arrow-left me-1"></i> Quay lại giỏ hàng
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <%- include('partials/footer') %>
+
+      <!-- ══ POPUP THÀNH CÔNG ══ -->
+      <div class="popup-overlay" id="successPopup">
+        <div class="popup-box">
+          <div class="popup-icon">🎉</div>
+          <div class="popup-title">Đặt hàng thành công!</div>
+          <div class="popup-order-id">
+            Mã đơn hàng: <strong id="popupOrderId">#000</strong>
+          </div>
+          <p class="popup-desc" id="popupDesc">
+            Cảm ơn bạn đã tin tưởng Pawmie 🐾<br>
+            Chúng tôi sẽ liên hệ xác nhận đơn hàng sớm nhất!
+          </p>
+          <button class="popup-btn" onclick="goHome()">
+            <i class="fas fa-home"></i> Về trang chủ
+          </button>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="/js/api.js"></script>
+      <script>
+        let currentPayment = 'cash';
+        let cartItems = [];
+
+        // ── Chọn phương thức thanh toán ──
+        function selectPayment(method) {
+          currentPayment = method;
+          document.getElementById('card-cash').classList.toggle('selected', method === 'cash');
+          document.getElementById('card-transfer').classList.toggle('selected', method === 'transfer');
+          document.getElementById('transferInfo').style.display = method === 'transfer' ? 'block' : 'none';
+        }
+
+        // ── Copy text vào clipboard ──
+        function copyText(text, btn) {
+          navigator.clipboard.writeText(text).then(() => {
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+            btn.style.background = '#0369a1';
+            btn.style.color = '#fff';
+            setTimeout(() => {
+              btn.innerHTML = original;
+              btn.style.background = '';
+              btn.style.color = '';
+            }, 2000);
+          });
+        }
+
+        // ── Tải sản phẩm trong giỏ để hiển thị bên phải ──
+        async function loadSummary() {
+          const user = await checkAuth();
+          let items = [];
+
+          try {
+            if (!user) {
+              const localCart = JSON.parse(localStorage.getItem('pawmie_cart')) || [];
+              if (localCart.length > 0) {
+                const res = await fetch('/cart/api/local', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ cart: localCart }),
+                });
+                if (res.ok) items = await res.json();
+              }
+            } else {
+              const res = await callAPI('/user/api/cart');
+              if (res.ok) items = await res.json();
+            }
+          } catch (err) {
+            console.error('Lỗi load summary:', err);
+          }
+
+          cartItems = items;
+
+          const container = document.getElementById('summaryItems');
+
+          if (!items || items.length === 0) {
+            container.innerHTML = `
+          <div class="text-center py-3" style="color:#888;font-size:0.9rem;">
+            Giỏ hàng trống! <a href="/products">Mua sắm ngay</a>
+          </div>`;
+            return;
+          }
+
+          let total = 0;
+          container.innerHTML = items.map(item => {
+            // 1. LẤY GIÁ ĐÃ GIẢM (NẾU CÓ)
+            const hasSale = item.percent && item.percent > 0;
+            const currentPrice = hasSale ? parseInt(item.sale_price) : parseInt(item.price);
+
+            // 2. TÍNH TỔNG DỰA TRÊN GIÁ ĐÃ GIẢM
+            const subtotal = currentPrice * item.quantity;
+            total += subtotal;
+
+            // 3. TẠO HTML GIÁ GỐC BỊ GẠCH NGANG (NẾU CÓ SALE)
+            const oldPriceHtml = hasSale
+              ? `<div style="font-size: 0.75rem; text-decoration: line-through; color: #999;">${(parseInt(item.price) * item.quantity).toLocaleString('vi-VN')}₫</div>`
+              : '';
+
+            return `
+          <div class="summary-item">
+            <img src="/${item.img || 'uploads/default.jpg'}" alt="${item.name}"
+                 onerror="this.src='/uploads/default.jpg'">
+            <div style="flex:1;min-width:0;">
+              <div class="summary-item-name">${item.name}</div>
+              <div class="summary-item-qty">x${item.quantity}</div>
+            </div>
+            <div style="text-align: right;">
+              ${oldPriceHtml}
+              <div class="summary-item-price">${subtotal.toLocaleString('vi-VN')}₫</div>
+            </div>
+          </div>`;
+          }).join('');
+
+          document.getElementById('totalDisplay').innerText = total.toLocaleString('vi-VN') + '₫';
+          document.getElementById('transferAmount').innerText = total.toLocaleString('vi-VN') + '₫';
+        }
+
+        // ── Đặt hàng ──
+        async function submitOrder() {
+          const fullName = document.getElementById('fullName').value.trim();
+          const phone = document.getElementById('phone').value.trim();
+          const address = document.getElementById('address').value.trim();
+          const note = document.getElementById('note').value.trim();
+
+          if (!fullName) { showToast('Vui lòng nhập họ tên người nhận!', 'error'); return; }
+          if (!phone) { showToast('Vui lòng nhập số điện thoại!', 'error'); return; }
+          if (!address) { showToast('Vui lòng nhập địa chỉ giao hàng!', 'error'); return; }
+
+          const btn = document.getElementById('placeOrderBtn');
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+
+          try {
+            const user = await checkAuth();
+            const localCart = !user ? (JSON.parse(localStorage.getItem('pawmie_cart')) || []) : [];
+
+            const res = await callAPI('/order/api/place', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                fullName,
+                phone,
+                address,
+                note,
+                paymentMethod: currentPayment,
+                localCart,
+              }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || !data.success) {
+              showToast(data.message || 'Đặt hàng thất bại!', 'error');
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fas fa-check-circle"></i> Đặt hàng ngay';
+              return;
+            }
+
+            // Xóa giỏ hàng localStorage nếu khách vãng lai
+            if (!user) localStorage.removeItem('pawmie_cart');
+
+            // Cập nhật nội dung chuyển khoản với mã đơn thật
+            document.getElementById('transferContent').innerText =
+              `PAWMIE ${data.orderId}`;
+
+            // Hiện popup thành công
+            document.getElementById('popupOrderId').innerText = '#' + data.orderId;
+
+            if (currentPayment === 'transfer') {
+              document.getElementById('popupDesc').innerHTML = `
+            Cảm ơn bạn đã tin tưởng Pawmie 🐾<br>
+            Vui lòng chuyển khoản <strong>${Number(data.totalPrice).toLocaleString('vi-VN')}₫</strong>
+            với nội dung <strong>PAWMIE ${data.orderId}</strong> để hoàn tất đơn hàng.`;
+            }
+
+            document.getElementById('successPopup').classList.add('show');
+
+          } catch (err) {
+            console.error('Lỗi submitOrder:', err);
+            showToast('Có lỗi xảy ra, thử lại nhé!', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Đặt hàng ngay';
+          }
+        }
+
+        function goHome() {
+          window.location.href = '/';
+        }
+
+        // Khởi tạo
+        loadSummary();
+      </script>
+
+</body>
+
+</html>

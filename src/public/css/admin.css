@@ -1,0 +1,358 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* LAYOUT */
+.admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+/* Sidebar active state */
+.menu-btn.active {
+  font-weight: bold; /* In đậm */
+  background-color: #e0e0e0; /* Thêm màu nền nhẹ để dễ nhận biết */
+  border-left: 4px solid #007bff; /* Thêm vạch màu bên trái cho chuyên nghiệp */
+  color: #000;
+}
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: #111827;
+  color: white;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TITLE */
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+/* MENU BUTTON CHUNG */
+.menu-btn {
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  background: #1f2937;
+  color: white;
+  text-align: left;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: 0.2s;
+}
+
+.menu-btn:hover {
+  background: #374151;
+}
+
+/* ACTIVE */
+.menu-btn.active {
+  background: #2563eb;
+}
+
+/* TRANG CHỦ (xanh) */
+.home-btn {
+  background: #3b82f6;
+}
+
+.home-btn:hover {
+  background: #2563eb;
+}
+
+/* LOGOUT (đỏ, nằm dưới cùng) */
+.logout {
+  margin-top: auto;
+  background: #dc2626;
+}
+
+.logout:hover {
+  background: #b91c1c;
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  padding: 20px;
+  background: #f3f4f6;
+}
+
+#content-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* TABLE */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.table th {
+  background: #222;
+  color: white;
+}
+
+.table tr:hover {
+  background: #f5f5f5;
+}
+
+/* HEADER TABLE */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* BUTTONS */
+.btn-add {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background: #218838;
+}
+
+.btn-edit {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background: #0056b3;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  width: 360px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.modal-content input:focus {
+  border-color: #2563eb;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-content button:first-of-type {
+  background: #2563eb;
+  color: white;
+}
+
+.modal-content button:last-of-type {
+  background: #e5e7eb;
+}
+
+/* MESSAGE */
+.form-message {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.form-message.success {
+  color: #16a34a;
+}
+
+.form-message.error {
+  color: #dc2626;
+}
+
+.modal.hidden {
+  display: none;
+}
+.modal.show {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+/* Khống chế bảng */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Giữ nguyên cái này nhưng phải định nghĩa width bên dưới */
+  background: white;
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Định nghĩa độ rộng cụ thể cho từng cột Blog */
+.table th:nth-child(1) {
+  width: 50px;
+} /* ID */
+.table th:nth-child(2) {
+  width: 35%;
+} /* Tiêu đề - Cho rộng nhất */
+.table th:nth-child(3) {
+  width: 120px;
+} /* Danh mục */
+.table th:nth-child(4) {
+  width: 100px;
+} /* Trạng thái */
+.table th:nth-child(5) {
+  width: 80px;
+} /* Lượt xem */
+.table th:nth-child(6) {
+  width: 110px;
+} /* Ngày tạo */
+.table th:nth-child(7) {
+  width: 140px;
+} /* Hành động */
+
+/* Reset lại cho các bảng khác (Sản phẩm, User) nếu cần */
+.table td button {
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   RESPONSIVE CHO TRANG ADMIN (MOBILE & TABLET)
+========================================= */
+@media (max-width: 768px) {
+  /* Chuyển bố cục từ trái-phải sang trên-dưới */
+  .admin-wrapper {
+    flex-direction: column; 
+  }
+
+  /* Ép thanh Sidebar nằm ngang lên đầu */
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 15px 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .sidebar h2 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  /* Thu nhỏ và chia cột cho các nút Menu */
+  .menu-btn {
+    margin-bottom: 0;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    flex: 1 1 calc(33.333% - 10px); /* Đt nhỏ thì chia 3 nút/hàng */
+    text-align: center;
+    border-left: none !important; /* Bỏ vạch dọc lúc active trên mobile */
+    border-bottom: 3px solid transparent;
+  }
+
+  .menu-btn.active {
+    border-bottom: 3px solid #007bff; /* Đổi vạch active xuống đáy nút */
+  }
+
+  /* Xử lý cho cái Bảng (Table) tự có thanh cuộn ngang khi màn hình hẹp */
+  .table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap; 
+  }
+
+  /* Xử lý phần Header của bảng (Tiêu đề và nút thêm) */
+  .table-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  /* Bóp cái Modal (Popup) cho vừa màn hình điện thoại */
+  .modal-content {
+    width: 90%; 
+    max-width: 360px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Màn hình cực nhỏ thì chia 2 nút/hàng thôi cho chữ đỡ bị ép */
+  .menu-btn {
+    flex: 1 1 calc(50% - 10px);
+  }
+}
